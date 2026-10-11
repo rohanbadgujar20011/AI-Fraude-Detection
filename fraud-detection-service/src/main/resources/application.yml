@@ -1,0 +1,46 @@
+server:
+  port: 8082
+
+spring:
+  application:
+    name: fraud-detection-service
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/frauddb
+    username: fraud_user
+    password: fraud_pass
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+
+  kafka:
+    bootstrap-servers: localhost:9092
+    consumer:
+      group-id: fraud-detection-group
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      properties:
+        spring.json.trusted.packages: "*"
+        spring.json.use.type.headers: false
+        spring.json.value.default.type: com.karthik.frauddetection.model.TransactionEvent
+
+  data:
+    redis:
+      host: localhost
+      port: 6379
+
+kafka:
+  topics:
+    transactions: transactions
+    approved: approved
+    fraud-alerts: fraud-alerts
+
+fraud:
+  rules:
+    amount-multiplier-threshold: 5      # flag if amount > 5x user's rolling avg
+    max-txns-per-minute: 4              # velocity check window
+    high-amount-absolute: 100000        # flag any single txn above this, regardless of history
+  ml:
+    score-threshold: 0.7                # ML score above this = fraud

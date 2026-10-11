@@ -1,0 +1,22 @@
+# Maven target directories and build artifacts
+target/
+*.class
+*.jar
+*.war
+*.ear
+
+# Virtual environment & Python cache
+venv/
+__pycache__/
+*.pyc
+*.joblib
+
+# IDE & OS files
+.DS_Store
+.idea/
+*.iml
+.vscode/
+
+# Docker volumes / logs
+pgdata/
+*.log
